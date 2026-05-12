@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   MenuIcon,
   X,
-  LayoutDashboard,
-  LogOut,
   ChevronDown,
 } from "lucide-react";
 
@@ -25,20 +23,6 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import { ThemeToggle } from "./ThemeToggle";
-import type { UserRole } from "@/types/database";
-import { supabase } from "@/lib/supabase";
-
-// ── Role → Path ───────────────────────────────────────────────
-const ROLE_HOME: Record<UserRole, string> = {
-  user:      "/profile",
-  agent:     "/dashboard",
-  developer: "/dashboard",
-  admin:     "/admin",
-};
-
-function getDashboardPath(role?: UserRole): string {
-  return ROLE_HOME[role!] ?? "/profile";
-}
 
 // ── LangSelector ─────────────────────────────────────────────
 const LangSelector = ({ isScrolled }: { isScrolled: boolean }) => {
@@ -98,57 +82,11 @@ export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen]         = useState(false);
   
-  // ✅ استخدام Supabase مباشرة للسرعة والدقة (Direct Access)
-  const [user, setUser] = useState<any>(null);
-  const [userRole, setUserRole] = useState<UserRole | undefined>();
-  const [ready, setReady] = useState(false);
-
   useEffect(() => {
-    // جلب الجلسة فوراً من التخزين المحلي (LocalStorage)
-    const initAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser(session.user);
-        // جلب الرتبة مباشرة من البروفايل
-        const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single() as any;
-        setUserRole(profile?.role as UserRole);
-      }
-      setReady(true);
-    };
-
-    initAuth();
-
-    // الاستماع لأي تغيير في حالة تسجيل الدخول (دخول/خروج) وتحديث الواجهة فوراً
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        setUser(session.user);
-        const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single() as any;
-        setUserRole(profile?.role as UserRole);
-      } else {
-        setUser(null);
-        setUserRole(undefined);
-      }
-    });
-
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      subscription.unsubscribe();
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const dashboardPath  = getDashboardPath(userRole);
-  // استخراج الاسم من البيانات الوصفية أو الإيميل
-  const userName = user?.user_metadata?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "";
-
-  const dashboardLabel =
-    userRole === "admin"
-      ? t("adminPanel")
-      : userRole === "agent" || userRole === "developer"
-      ? t("dashboard")
-      : userName;
 
   const navigationItems = [
     { label: t("works"),    href: "/" },
