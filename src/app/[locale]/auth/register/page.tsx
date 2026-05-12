@@ -37,20 +37,24 @@ export default function RegisterPage() {
     setMessage({ type: "", text: "" });
 
     try {
-      // 1. إنشاء الحساب في نظام الـ Auth
+      // 1. إنشاء الحساب في نظام الـ Auth الخاص بسوبابيز
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
+          // نرسل البيانات الإضافية في الـ metadata كاحتياط
+          data: {
+            full_name: formData.fullName,
+            role: formData.role,
+          }
         }
       });
 
       if (authError) throw authError;
 
-      // 2. إدخال أو تحديث البيانات في جدول profiles
-      // استخدمنا upsert لمنع خطأ duplicate key value
-      if (authData.user) {
+      // 2. إذا نجح الإنشاء، نقوم بحفظ البيانات الإضافية في جدول Profiles
+      if (authData?.user) {
         const { error: profileError } = await supabase
           .from("profiles")
           .upsert(
@@ -61,11 +65,11 @@ export default function RegisterPage() {
               phone: formData.phone,
               role: formData.role,
             },
-            { onConflict: 'id' } // لو الـ ID موجود فعلاً، حدث البيانات ولا تظهر خطأ
+            { onConflict: 'id' }
           );
 
         if (profileError) {
-          console.error("DEBUG - Database Error Details:", profileError);
+          console.error("DEBUG - Database Error:", profileError);
           throw new Error(isRtl ? `خطأ في قاعدة البيانات: ${profileError.message}` : `DB Error: ${profileError.message}`);
         }
 
@@ -74,6 +78,7 @@ export default function RegisterPage() {
           text: isRtl ? "تم إنشاء الحساب بنجاح! جاري التوجيه..." : "Account created successfully! Redirecting..." 
         });
 
+        // توجيه المستخدم بعد نجاح العملية
         setTimeout(() => {
           router.push(`/${locale}/auth/login`);
         }, 2000);
@@ -90,13 +95,13 @@ export default function RegisterPage() {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-lg bg-slate-900/50 border border-slate-800 p-8 rounded-3xl shadow-2xl backdrop-blur-xl"
+        className="w-full max-w-lg p-8 border shadow-2xl bg-slate-900/50 border-slate-800 rounded-3xl backdrop-blur-xl"
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent mb-2">
+        <div className="mb-8 text-center">
+          <h1 className="mb-2 text-3xl font-extrabold text-transparent bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text">
             {isRtl ? "ابدأ رحلتك معنا" : "Start Your Journey"}
           </h1>
-          <p className="text-slate-400 text-sm italic font-light tracking-wide">Business Pioneers Holding</p>
+          <p className="text-sm italic font-light tracking-wide text-slate-400">Business Pioneers Holding</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -118,7 +123,7 @@ export default function RegisterPage() {
         </AnimatePresence>
 
         <form onSubmit={handleRegister} className="space-y-5">
-          {/* Role Switcher */}
+          {/* اختيار نوع الحساب */}
           <div className="flex p-1.5 bg-slate-950 rounded-2xl border border-slate-800 gap-2">
             {['user', 'agent'].map((r) => (
               <button
@@ -134,8 +139,8 @@ export default function RegisterPage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Full Name */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {/* الاسم بالكامل */}
             <div className="space-y-2">
               <label className="text-[10px] uppercase font-bold text-slate-500 px-1 tracking-widest">{isRtl ? "الاسم الكامل" : "Full Name"}</label>
               <div className="relative">
@@ -144,12 +149,13 @@ export default function RegisterPage() {
                   required
                   className={`w-full bg-slate-950 border border-slate-800 py-3.5 ${isRtl ? 'pr-11 pl-4' : 'pl-11 pr-4'} rounded-xl focus:border-blue-500 outline-none transition-all placeholder:text-slate-700`}
                   placeholder={isRtl ? "أحمد محمد" : "John Doe"}
+                  value={formData.fullName}
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                 />
               </div>
             </div>
 
-            {/* Phone */}
+            {/* رقم الجوال */}
             <div className="space-y-2">
               <label className="text-[10px] uppercase font-bold text-slate-500 px-1 tracking-widest">{isRtl ? "الجوال" : "Phone"}</label>
               <div className="relative">
@@ -158,13 +164,14 @@ export default function RegisterPage() {
                   required
                   className={`w-full bg-slate-950 border border-slate-800 py-3.5 ${isRtl ? 'pr-11 pl-4' : 'pl-11 pr-4'} rounded-xl focus:border-blue-500 outline-none transition-all placeholder:text-slate-700`}
                   placeholder="05xxxxxxx"
+                  value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                 />
               </div>
             </div>
           </div>
 
-          {/* Email */}
+          {/* البريد الإلكتروني */}
           <div className="space-y-2">
             <label className="text-[10px] uppercase font-bold text-slate-500 px-1 tracking-widest">{isRtl ? "البريد الإلكتروني" : "Email"}</label>
             <div className="relative">
@@ -174,12 +181,13 @@ export default function RegisterPage() {
                 required
                 className={`w-full bg-slate-950 border border-slate-800 py-3.5 ${isRtl ? 'pr-11 pl-4' : 'pl-11 pr-4'} rounded-xl focus:border-blue-500 outline-none transition-all placeholder:text-slate-700`}
                 placeholder="example@mail.com"
+                value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
             </div>
           </div>
 
-          {/* Password */}
+          {/* كلمة المرور */}
           <div className="space-y-2">
             <label className="text-[10px] uppercase font-bold text-slate-500 px-1 tracking-widest">{isRtl ? "كلمة المرور" : "Password"}</label>
             <div className="relative">
@@ -189,6 +197,7 @@ export default function RegisterPage() {
                 required
                 className={`w-full bg-slate-950 border border-slate-800 py-3.5 ${isRtl ? 'pr-11 pl-12' : 'pl-11 pr-12'} rounded-xl focus:border-blue-500 outline-none transition-all placeholder:text-slate-700`}
                 placeholder="••••••••"
+                value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
               />
               <button 
@@ -210,9 +219,9 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <div className="mt-8 text-center text-slate-500 text-sm">
+        <div className="mt-8 text-sm text-center text-slate-500">
           {isRtl ? "لديك حساب بالفعل؟" : "Already have an account?"} {" "}
-          <Link href="/auth/login" className="text-blue-400 font-bold hover:underline transition-all">
+          <Link href="/auth/login" className="font-bold text-blue-400 transition-all hover:underline">
             {isRtl ? "تسجيل الدخول" : "Login Now"}
           </Link>
         </div>

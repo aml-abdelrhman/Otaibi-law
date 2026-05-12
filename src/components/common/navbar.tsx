@@ -6,7 +6,6 @@ import {
   MenuIcon,
   X,
   LayoutDashboard,
-  LogIn,
   LogOut,
   ChevronDown,
 } from "lucide-react";
@@ -246,13 +245,13 @@ export const Navbar = () => {
             <LangSelector isScrolled={isScrolled} />
 
             {/* نستخدم ready لضمان عدم حدوث Hydration Mismatch مع عرض البيانات فور توفرها */}
-            {ready && user ? (
+            {ready && user && (
               <div className="flex items-center gap-1.5">
                 <Button
                   variant="default"
                   size="sm"
                   className="h-8 px-4 text-xs font-bold text-white bg-blue-900 rounded-full hover:bg-blue-800"
-                  onClick={() => router.push(`/${locale}${dashboardPath}`)}
+                  onClick={() => router.push(dashboardPath)}
                 >
                   <LayoutDashboard className="w-3.5 h-3.5 mr-1.5" />
                   {dashboardLabel}
@@ -260,21 +259,12 @@ export const Navbar = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={async () => { await supabase.auth.signOut(); router.push(`/${locale}`); }}
+                  onClick={async () => { await supabase.auth.signOut(); router.push("/"); }}
                   className="w-8 h-8 text-red-500 rounded-full hover:bg-red-50"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                 </Button>
               </div>
-            ) : ready && (
-              <Button
-                size="sm"
-                onClick={() => router.push("/auth/login")}
-                className="h-8 px-5 text-xs font-bold text-white transition-all border-none rounded-full shadow-sm bg-[#D4AF37] hover:opacity-90"
-              >
-                <LogIn className="w-3.5 h-3.5 mr-1.5" />
-                {t("login")}
-              </Button>
             )}
           </div>
         </div>
@@ -340,13 +330,13 @@ export const Navbar = () => {
                     <LangSelector isScrolled={true} />
                   </div>
 
-                  {ready && user ? (
+                  {ready && user && (
                     <div className="flex flex-col gap-3">
                       <Button
-                        className="w-full py-5 text-sm font-bold bg-blue-900 hover:bg-blue-800 text-white rounded-xl"
+                        className="w-full py-5 text-sm font-bold text-white bg-blue-900 hover:bg-blue-800 rounded-xl"
                         onClick={() => {
                           setIsOpen(false);
-                          router.push(`/${locale}${dashboardPath}`);
+                          router.push(dashboardPath);
                         }}
                       >
                         <LayoutDashboard className="w-4 h-4 mr-2" />
@@ -358,23 +348,13 @@ export const Navbar = () => {
                         onClick={async () => {
                           setIsOpen(false);
                           await supabase.auth.signOut();
-                          router.push(`/${locale}`);
+                          router.push("/");
                         }}
                       >
                         <LogOut className="w-4 h-4 mr-2" />
                         {t("logout")}
                       </Button>
                     </div>
-                  ) : ready && (
-                    <Button
-                      className="w-full py-6 text-lg font-bold bg-[#D4AF37] hover:opacity-90 text-white rounded-xl"
-                      onClick={() => {
-                        setIsOpen(false);
-                        router.push("/auth/login");
-                      }}
-                    >
-                      {t("login")}
-                    </Button>
                   )}
                 </div>
               </div>
