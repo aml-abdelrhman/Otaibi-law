@@ -244,28 +244,7 @@ export const Navbar = () => {
             <ThemeToggle />
             <LangSelector isScrolled={isScrolled} />
 
-            {/* نستخدم ready لضمان عدم حدوث Hydration Mismatch مع عرض البيانات فور توفرها */}
-            {ready && user && (
-              <div className="flex items-center gap-1.5">
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="h-8 px-4 text-xs font-bold text-white bg-blue-900 rounded-full hover:bg-blue-800"
-                  onClick={() => router.push(dashboardPath)}
-                >
-                  <LayoutDashboard className="w-3.5 h-3.5 mr-1.5" />
-                  {dashboardLabel}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={async () => { await supabase.auth.signOut(); router.push("/"); }}
-                  className="w-8 h-8 text-red-500 rounded-full hover:bg-red-50"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                </Button>
-              </div>
-            )}
+          
           </div>
         </div>
 
@@ -330,32 +309,8 @@ export const Navbar = () => {
                     <LangSelector isScrolled={true} />
                   </div>
 
-                  {ready && user && (
-                    <div className="flex flex-col gap-3">
-                      <Button
-                        className="w-full py-5 text-sm font-bold text-white bg-blue-900 hover:bg-blue-800 rounded-xl"
-                        onClick={() => {
-                          setIsOpen(false);
-                          router.push(dashboardPath);
-                        }}
-                      >
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        {dashboardLabel}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="w-full py-5 text-sm font-bold text-red-500 border-red-200 rounded-xl hover:bg-red-50"
-                        onClick={async () => {
-                          setIsOpen(false);
-                          await supabase.auth.signOut();
-                          router.push("/");
-                        }}
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        {t("logout")}
-                      </Button>
-                    </div>
-                  )}
+                  
+                  
                 </div>
               </div>
             </SheetContent>
