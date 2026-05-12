@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useAppStore } from "@/store/useStore";
 import { useAdminGuard } from "@/hooks/useAuth"; // تأكدي أن هذا الهوك يتحقق من الـ Role
 import { Link } from "@/i18n/navigation";
-import { logoutAction } from "@/actions/auth.actions";
+import { logoutAction } from "@/components/actions/auth.actions"; // تأكدي من وجود هذا الأكشن للتعامل مع تسجيل الخروج
 import { supabase } from "@/lib/supabase"; // استيراد سوبابيز
 
 import {
@@ -65,12 +65,12 @@ function Sidebar({
         "p-6 border-b flex items-center gap-3",
         darkMode ? "border-slate-800" : "border-slate-100"
       )}>
-        <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20">
+        <div className="flex items-center justify-center w-10 h-10 font-bold text-white bg-blue-600 shadow-lg rounded-xl shadow-blue-500/20">
           A
         </div>
         {!collapsed && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="overflow-hidden">
-            <p className="text-xs font-bold text-blue-500 uppercase tracking-tighter">Admin Panel</p>
+            <p className="text-xs font-bold tracking-tighter text-blue-500 uppercase">Admin Panel</p>
             <p className={cn("text-sm font-black truncate", darkMode ? "text-white" : "text-slate-900")}>
               أمل عبد الرحمن
             </p>
@@ -115,7 +115,7 @@ function Sidebar({
 
       <div className={cn("p-4 border-t", darkMode ? "border-slate-800" : "border-slate-100")}>
         <form action={logoutAction}>
-          <button type="submit" className="flex items-center gap-3 w-full px-4 py-3 rounded-2xl text-sm font-bold text-rose-500 hover:bg-rose-50 transition-colors">
+          <button type="submit" className="flex items-center w-full gap-3 px-4 py-3 text-sm font-bold transition-colors rounded-2xl text-rose-500 hover:bg-rose-50">
             <LogOut size={18} />
             {!collapsed && <span>تسجيل الخروج</span>}
           </button>
@@ -160,7 +160,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (isLoading) return (
     <div className={cn("h-screen flex items-center justify-center", darkMode ? "bg-slate-950" : "bg-slate-50")}>
-       <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full" />
+       <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-10 h-10 border-4 border-blue-600 rounded-full border-t-transparent" />
     </div>
   );
 
@@ -182,14 +182,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </motion.div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 relative">
+      <div className="relative flex flex-col flex-1 min-w-0">
         
         {/* Top Header */}
         <header className={cn(
           "h-20 flex items-center justify-between px-8 border-b z-10 backdrop-blur-md",
           darkMode ? "bg-slate-900/50 border-slate-800" : "bg-white/50 border-slate-100"
         )}>
-          <button onClick={() => setCollapsed(!collapsed)} className="p-2 hover:bg-slate-100 rounded-xl transition-all">
+          <button onClick={() => setCollapsed(!collapsed)} className="p-2 transition-all hover:bg-slate-100 rounded-xl">
             <LayoutDashboard className="text-blue-600" size={20} />
           </button>
 
@@ -200,14 +200,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </span>
                 <span className="text-[10px] text-emerald-500 font-bold uppercase">Online • Admin</span>
              </div>
-             <div className="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden">
+             <div className="w-10 h-10 overflow-hidden border-2 border-white rounded-full shadow-sm bg-slate-200">
                 <img src={`https://ui-avatars.com/api/?name=${user?.email}&background=0D8ABC&color=fff`} alt="admin" />
              </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-transparent relative">
+        <main className="relative flex-1 overflow-y-auto bg-transparent">
           {/* Subtle Glow Effect */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
           
@@ -228,7 +228,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <motion.div 
               initial={{ x: locale === 'ar' ? '100%' : '-100%' }}
               animate={{ x: 0 }} exit={{ x: locale === 'ar' ? '100%' : '-100%' }}
-              className="w-72 h-full bg-white dark:bg-slate-900"
+              className="h-full bg-white w-72 dark:bg-slate-900"
               onClick={e => e.stopPropagation()}
             >
               <Sidebar collapsed={false} darkMode={darkMode} locale={locale} pathname={pathname} dynamicBadges={badges} onClose={() => setMobileOpen(false)} />
@@ -240,7 +240,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Floating Mobile Toggle */}
       <button 
         onClick={() => setMobileOpen(true)}
-        className="fixed bottom-6 right-6 lg:hidden w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center z-40"
+        className="fixed z-40 flex items-center justify-center text-white bg-blue-600 rounded-full shadow-2xl bottom-6 right-6 lg:hidden w-14 h-14"
       >
         <Shield size={24} />
       </button>
