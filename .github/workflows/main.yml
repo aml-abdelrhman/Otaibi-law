@@ -1,0 +1,15 @@
+name: Keep Business Pioneers Alive
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping_site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Request to Business Pioneers
+        run: |
+          curl -s https://fullstack-pioneers.vercel.app/
+          echo "Ping sent successfully to the correct link!"
