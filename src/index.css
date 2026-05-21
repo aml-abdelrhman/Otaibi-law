@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* دعم الخط العربي الأنيق */
+[dir="rtl"] {
+  font-family: 'Cairo', sans-serif;
+}
+
+/* التنسيق المتوافق مع Tailwind v4 والخلفية الكحلية الداكنة */
+body {
+  @apply bg-[#05080f] text-white antialiased;
+}
