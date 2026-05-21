@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppStore } from '@/store/useAppStore'; // Keep this import
+import Image from 'next/image';
 import { ShieldCheck, Clock, Award, Activity, UserCheck, Scale, ThumbsUp } from 'lucide-react';
 import heroImage from '@/assets/hero.png';
 import lawImage from '@/assets/law.jpg';
@@ -24,12 +25,14 @@ export const Features: React.FC = () => {
     <section className="bg-[#030712]">
       {/* القسم الأول: العنوان والمميزات - ثابت كما هو */}
       <div className="relative overflow-hidden">
-        <div 
-          className="absolute inset-0 z-0 bg-center bg-no-repeat bg-cover opacity-25"
-          style={{ 
-            backgroundImage: `url(${typeof heroImage === 'string' ? heroImage : (heroImage as any).src})` 
-          }}
-        />
+        <div className="absolute inset-0 z-0 opacity-25">
+          <Image 
+            src={heroImage} 
+            alt="Hero Background" 
+            fill 
+            className="object-cover object-center" 
+          />
+        </div>
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#030712]/95 via-[#030712]/85 to-[#030712]/95" />
 
         <div className="relative z-10 w-full pt-20 pb-0" style={{ direction: dir }}>
@@ -62,12 +65,14 @@ export const Features: React.FC = () => {
 
       {/* القسم الثاني: الإحصائيات (Stats) في ديف منفصل مع خلفية الصورة المطلوبة */}
       <div className="relative overflow-hidden">
-        <div 
-          className="absolute inset-0 z-0 bg-fixed bg-center bg-cover opacity-25"
-          style={{ 
-            backgroundImage: `url(${typeof lawImage === 'string' ? lawImage : (lawImage as any).src})` 
-          }}
-        />
+        <div className="absolute inset-0 z-0 opacity-25">
+          <Image 
+            src={lawImage} 
+            alt="Law Background" 
+            fill 
+            className="object-cover object-center" 
+          />
+        </div>
         <div className="absolute inset-0 z-0 bg-[#1a1108]/80 backdrop-blur-sm" />
         <div className="relative z-10 w-full pt-4" style={{ direction: dir }}>
           <div className="relative grid w-full grid-cols-2 p-10 lg:grid-cols-4 gap-y-10 bg-[#0a192f]/60 backdrop-blur-md border-y border-white/5">

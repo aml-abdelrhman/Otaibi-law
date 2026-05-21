@@ -1,5 +1,9 @@
+'use client';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/store/useAppStore';
 import { supabase } from '@/lib/supabase';
 import lawImage from '@/assets/law.jpg';
@@ -7,6 +11,7 @@ import { Mail, Phone, MapPin, Send, Loader2, Twitter, Instagram, Linkedin, Faceb
 
 export const BookingForm: React.FC = () => {
   const { lang, dir } = useAppStore();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: React.ReactNode } | null>(null);
 
@@ -45,7 +50,7 @@ export const BookingForm: React.FC = () => {
               ? 'تم إرسال طلبك بنجاح! سنتواصل معك قريباً. يمكنك متابعة حالة طلبك في أي وقت باستخدام رقم هاتفك من خلال ' 
               : 'Your request sent successfully! We will contact you soon. You can track your request status at any time using your phone number via '}
             <Link 
-              href="/admin/consultations/track" 
+              href="/consultations/track" 
               className="font-bold underline transition-colors hover:text-white"
             >
               {lang === 'ar' ? 'صفحة تتبع الطلبات' : 'Track Requests'}
@@ -55,6 +60,11 @@ export const BookingForm: React.FC = () => {
         )
       });
       setFormData({ fullName: '', phoneNumber: '', email: '', consultationType: '', description: '' });
+
+      // التوجيه إلى صفحة التتبع بعد ثانيتين
+      setTimeout(() => {
+        router.push('/consultations/track');
+      }, 2000);
     } catch (err: any) {
       setMessage({
         type: 'error',
@@ -74,6 +84,14 @@ export const BookingForm: React.FC = () => {
           backgroundImage: `url(${typeof lawImage === 'string' ? lawImage : (lawImage as any).src})` 
         }}
       />
+      <div className="absolute inset-0 z-0 opacity-25">
+        <Image
+          src={lawImage}
+          alt="Legal Background"
+          fill
+          className="object-cover object-center"
+        />
+      </div>
       <div className="absolute inset-0 z-0 bg-[#7e6229]/15 backdrop-blur-[2px] bg-gradient-to-b from-[#030712]/40 via-transparent to-[#030712]/80" />
 
       <div className="relative z-10 grid grid-cols-1 gap-12 px-6 mx-auto max-w-7xl lg:grid-cols-12" style={{ direction: dir }}>

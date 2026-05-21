@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { useAppStore } from '@/store/useAppStore';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, User, ArrowLeft, ArrowRight, Clock, ChevronRight } from 'lucide-react';
 import lawImg from '@/assets/law.jpg';
 
@@ -51,9 +52,10 @@ export default function BlogPostPage() {
       {/* Hero Section - Article Header */}
       <div className="relative h-[60vh] min-h-[500px] flex items-center justify-center pt-32">
         <div className="absolute inset-0 z-0">
-          <img 
-            src={typeof lawImg === 'string' ? lawImg : (lawImg as any).src} 
-            className="object-cover object-center w-full h-full opacity-30"
+          <Image 
+            src={lawImg} 
+            fill
+            className="object-cover object-center opacity-30"
             alt="Legal Background"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a192f]/40 via-[#0a192f]/80 to-[#0a192f]" />

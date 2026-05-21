@@ -67,7 +67,16 @@ export default function TrackConsultationPage() {
       .eq('phone_number', phone.trim())
       .order('created_at', { ascending: false });
 
-    if (!error && data) {
+    if (error) {
+      console.error('❌ Supabase error:', error.message);
+    }
+
+    if (data && data.length === 0) {
+      console.warn('⚠️ No data found. Ensure RLS policies in Supabase allow "anon" access to the consultations table.');
+    }
+
+    if (data) {
+      console.log('Fetched data:', data);
       setResults(data);
     }
     setLoading(false);
@@ -81,7 +90,7 @@ export default function TrackConsultationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 py-20 px-4 relative overflow-hidden" style={{ direction: dir }}>
+    <div className="min-h-screen bg-[#020617] text-slate-100 pt-36 pb-20 px-4 relative overflow-hidden" style={{ direction: dir }}>
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#c5a85c]/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 max-w-2xl mx-auto space-y-8">

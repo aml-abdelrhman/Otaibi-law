@@ -4,6 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAppStore } from '@/store/useAppStore';
 import Link from 'next/link';
+import Image from 'next/image';
 import { LogOut, Calendar } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -71,9 +72,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <main className="relative flex-1 p-8 pt-32 overflow-y-auto">
         {/* شعار الخلفية في المنتصف مع تأثير غشاء خفيف جداً */}
         <div className="absolute inset-0 z-0 flex items-center justify-center overflow-hidden pointer-events-none select-none">
-          <img 
+          <Image 
             src="/logo3.png" 
             alt="Background Logo" 
+            width={600}
+            height={600}
             className="w-[300px] md:w-[600px] h-auto opacity-10 grayscale brightness-125 select-none pointer-events-none transform translate-y-20"
           />
         </div>

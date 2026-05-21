@@ -68,10 +68,10 @@ export const Navbar: React.FC = () => {
 
         <div className="flex items-center gap-4">
           <Link 
-            href="/admin/consultations/track" 
+            href="/consultations/track" 
             className="hidden lg:flex px-6 py-2.5 bg-transparent hover:bg-[#c5a85c]/5 text-[#c5a85c] font-semibold border border-[#c5a85c]/30 rounded-lg text-xs transition-all whitespace-nowrap"
           >
-            {lang === 'ar' ? 'تتبع حالة طلب سابق' : 'Track Previous Request'}
+            {lang === 'ar' ? 'تابع استشارتك' : 'Track Your Request'}
           </Link>
           
           <button 
@@ -125,11 +125,11 @@ export const Navbar: React.FC = () => {
           ))}
           
           <Link 
-            href="/admin/consultations/track" 
+            href="/consultations/track" 
             onClick={() => setIsOpen(false)}
             className="flex items-center justify-center w-full px-8 py-3.5 bg-transparent hover:bg-[#c5a85c]/5 text-[#c5a85c] font-semibold border border-[#c5a85c]/30 rounded-lg text-sm transition-all lg:hidden"
           >
-            {lang === 'ar' ? 'تتبع حالة طلب سابق' : 'Track Previous Request'}
+            {lang === 'ar' ? 'تابع استشارتك' : 'Track Your Request'}
           </Link>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { useAppStore } from '../../store/useAppStore';
 import { Target, Award, Users, Scale, Shield, History, CheckCircle2, Briefcase, ChevronRight, Gavel, FileText, Clock, Lightbulb } from 'lucide-react';
 import { motion } from 'framer-motion';
 import lawImg from '@/assets/law.jpg';
+import Image from 'next/image'; // استيراد مكون Image
 
 export default function AboutPage() {
   const { lang, dir } = useAppStore();
@@ -78,9 +79,10 @@ export default function AboutPage() {
       {/* Hero Section with Luxurious Background */}
       <div className="relative h-[60vh] min-h-[500px] flex items-center justify-center pt-24">
         <div className="absolute inset-0 z-0">
-          <img 
+          <Image // استخدام مكون Image
             src={typeof lawImg === 'string' ? lawImg : (lawImg as any).src} 
-            className="object-cover object-center w-full h-full opacity-50"
+            fill // لجعل الصورة تملأ الحاوية
+            className="object-cover object-center opacity-50" // إزالة w-full h-full واستخدام fill
             alt="Legal Background"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a192f]/20 via-[#0a192f]/40 to-[#0a192f]/60" />
@@ -179,10 +181,12 @@ export default function AboutPage() {
             transition={{ duration: 2.5, ease: "easeOut" }}
             className="absolute z-0 -translate-x-1/2 -translate-y-1/2 pointer-events-none top-1/2 left-1/2"
           >
-            <img 
+            <Image // استخدام مكون Image
               src="/logo3.png" 
-              alt="" 
-              className="w-[500px] md:w-[800px] h-auto filter brightness-0 invert"
+              alt="Background Logo" 
+              width={800} // تحديد عرض تقريبي
+              height={800} // تحديد ارتفاع تقريبي
+              className="w-[500px] md:w-[800px] h-auto filter brightness-0 invert" // الحفاظ على التنسيق
             />
           </motion.div>
 
