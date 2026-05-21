@@ -1,4 +1,4 @@
-name: Keep Business Pioneers Alive
+name: Keep Legal Tech Alive
 
 on:
   schedule:
@@ -9,7 +9,7 @@ jobs:
   ping_site:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Request to Business Pioneers
+      - name: Send Request to Legal Tech Platform
         run: |
-          curl -s https://fullstack-pioneers.vercel.app/
-          echo "Ping sent successfully to the correct link!"
+          curl -s https://otaibi-law-q395.vercel.app/
+          echo "Ping sent successfully to the Legal Tech link!"
