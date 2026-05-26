@@ -9,10 +9,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  ping_site:
+  ping_services:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Request to Legal Tech Platform
-        run: |
-          curl -s https://otaibi-law-q395.vercel.app/
-          echo "Ping sent successfully to the Legal Tech link!"
+      - name: Ping Legal Tech Vercel
+        run: curl -s https://otaibi-law-q395.vercel.app/
+      
+      - name: Ping Supabase API
+        # استخدام رابط الـ API الخاص بك
+        run: curl -s https://nxycnbsaanjzsufziaun.supabase.co/rest/v1/
+        
+      - name: Log Success
+        run: echo "Ping sent successfully to both Legal Tech and Supabase!"
