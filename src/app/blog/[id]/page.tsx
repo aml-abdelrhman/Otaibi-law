@@ -165,7 +165,7 @@ export default function BlogPostPage() {
             <p className="max-w-md mx-auto mb-8 text-gray-400">
               {isAr ? 'نحن هنا لمساعدتك في فهم كافة الجوانب القانونية المتعلقة بموضوعك.' : 'We are here to help you understand all legal aspects related to your matter.'}
             </p>
-            <Link href="/contact" className="inline-flex items-center gap-2 px-8 py-3 bg-[#9c7b3c] hover:bg-[#8a6d35] text-white font-bold rounded-xl transition-all">
+            <Link href="/#booking" className="inline-flex items-center gap-2 px-8 py-3 bg-[#9c7b3c] hover:bg-[#8a6d35] text-white font-bold rounded-xl transition-all">
               {isAr ? 'احجز استشارة الآن' : 'Book a Consultation Now'}
             </Link>
           </div>
